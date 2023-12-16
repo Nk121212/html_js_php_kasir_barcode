@@ -158,6 +158,18 @@
 
         include 'config.php';
 
+        //ambil data session sekarang
+        $sql_1 = "SELECT session FROM session_now WHERE id = '1' ";
+        $result_1 = $conn->query($sql_1);
+
+        while ($rows_1 = $result_1->fetch_assoc()) {
+            $sess_now = $rows_1['session'];
+        }
+
+        //replace ke table session_old
+        $sql_2 = "REPLACE INTO session_old (id, session) VALUES (1, '".$sess_now."') ";
+        $result_2 = $conn->query($sql_2);
+        
         $sql = "UPDATE session_now SET `session` = NULL WHERE id = '1' ";
 
         if ($conn->query($sql) === TRUE) {
@@ -166,6 +178,21 @@
             // throw new Exception("Error: " . $sql . "<br>" . $conn->error);
             return false;
         }
+    }
+
+    function get_session_before(){
+
+        include 'config.php';
+
+        $sql = "SELECT session FROM session_old WHERE id = '1' ";
+        $result = $conn->query($sql);
+        
+        $session_before = "";
+        while ($rows = $result->fetch_assoc()) {
+            $session_before = $rows['session'];
+        }
+
+        return $session_before;
     }
 
     function get_list_barang_not_scanable(){

@@ -325,4 +325,31 @@
         
     }
 
+    function loadAndPrint() {
+        // Use AJAX to load content from receipt.php
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // On successful response, set the content and print
+                var content = xhr.responseText;
+                printContent(content);
+            }
+        };
+        xhr.open("GET", "receipt.php", true);
+        xhr.send();
+    }
+
+    function printContent(content) {
+        var printWindow = window.open('', '_blank');
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+
+        setTimeout(function() {
+            printWindow.close();
+        }, 1000);
+    }
+
     </script>
