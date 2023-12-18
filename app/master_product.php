@@ -4,19 +4,21 @@
         <!-- main here -->
         <a id="btn_add_barang" onclick="handle_action('', 'add')" class="btn btn-sm btn-success"><span class="material-icons">add</span> Tambah Barang</a>
 
-        <table class="table" id="table-report">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Code</th>
-                    <th>Nama Product</th>
-                    <th>Harga Beli</th>
-                    <th>Harga Jual Grosir</th>
-                    <th>Harga Jual Retail</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="col-12 table-responsive">
+          <table class="table" id="table-report">
+              <thead>
+                  <tr>
+                      <th>No</th>
+                      <th>Code</th>
+                      <th>Nama Product</th>
+                      <th>Harga Beli</th>
+                      <th>Harga Jual Grosir</th>
+                      <th>Harga Jual Retail</th>
+                      <th>Action</th>
+                  </tr>
+              </thead>
+          </table>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade modal_form" class="modal_global" id="form_barang" tabindex="-1" role="dialog" aria-labelledby="modal_formLabelby" aria-hidden="true">

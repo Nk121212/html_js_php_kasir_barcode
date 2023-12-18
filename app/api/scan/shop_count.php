@@ -5,12 +5,15 @@
     
     // $session = $_POST['session'];
     // $session = 'MTAxMjIwMjMxNDI2MDk=';
-    $session = get_session(); //get dulu session sebelum di destroy untuk query get data nya
+    // $session = get_session(); //get dulu session sebelum di destroy untuk query get data nya
 
     destroy_session();   // destroy session disini karena sudah selesai belanja
+
+    $session = get_session_before();
     
     $sql = "
     SELECT
+        B.nama_product,
         A.CODE AS code,
         COUNT( A.total_pcs ) AS total_pcs,
         A.`session` AS `session`,
@@ -25,14 +28,14 @@
     GROUP BY
     code;
     ";
-    // echo $sql;
+    // echo $sql;exit;
     $result = $conn->query($sql);
     
     $data = array();
     $i=0;
 
     while ($rows = $result->fetch_assoc()) {
-        $data[$i] = array('code' => $rows['code'], 'total_pcs' => $rows['total_pcs'], 'harga_beli' => $rows['harga_beli'], 'harga_jual' => $rows['harga_jual'], 'total_harga' => $rows['total_harga'] );
+        $data[$i] = array('code' => $rows['code'], 'nama_product' => $rows['nama_product'], 'total_pcs' => $rows['total_pcs'], 'harga_beli' => $rows['harga_beli'], 'harga_jual' => $rows['harga_jual'], 'total_harga' => $rows['total_harga'] );
         $i++;
     }
     

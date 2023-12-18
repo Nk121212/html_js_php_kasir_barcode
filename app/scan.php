@@ -11,11 +11,11 @@
 
     <div class="container-fluid py-4">
         
-        <div class="col-lg-12" id="scanner-container">
+        <div class="col-12" id="scanner-container">
 
         </div>
         
-        <div class="col-lg-12">
+        <div class="col-12">
             <button class="btn btn-warning" id="btn_manual_transact" style="width: -webkit-fill-available;">Transaksi Manual <span class="material-icons">shopping_cart</span></button>
             <button class="btn btn-success" id="shop_done" style="width: -webkit-fill-available;">Belanja Selesai <span class="material-icons">done</span></button>
             <!-- <button type="button" class="btn btn-primary" id="btn_test" style="width: -webkit-fill-available;">test</button> -->
@@ -129,6 +129,7 @@
                 data: form.serialize(), // serializes the form's elements.
                 success: function(data)
                 {
+                    // alert(data);
                     result = JSON.parse(data);
                     
                     if(result.res == '00'){
@@ -143,7 +144,8 @@
 
         $('#btn_save_barang_ada').click(function(){
             var def_harga = $('input[name="def_harga_ada"]:checked').val();
-            save_transaction(dynamic_code, def_harga);
+            var total_pcs_ada = $('#total_pcs_brg_ada').val();
+            save_transaction(dynamic_code, def_harga, total_pcs_ada);
             $('#modal_barang_ada').modal('hide');
         })
 
@@ -155,8 +157,9 @@
             console.log($('#code_manual').val());
             var code_from_manual_transac = $('#code_manual').val();
             var def_harga = $('input[name="def_harga_manual"]:checked').val();
+            var total_pcs = $('#total_pcs_manual').val();
             set_session();
-            save_transaction(code_from_manual_transac, def_harga);
+            save_transaction(code_from_manual_transac, def_harga, total_pcs);
             $('#modal_manual_tran').modal('hide');
         })
             
@@ -170,6 +173,8 @@
                 },
                 success: function(data){
 
+                    // alert(data);
+
                     // alert('shop count = '+data);
                     // console.log(data);
                     $("#fetch_table_detail_shop").html("");
@@ -181,19 +186,34 @@
                         
                         $('#totalBelanjaModal').modal('show');
                         var no = 1;
+                        var gt = 0;
                         $.each(result.data, function(i, item) {
                             // alert(item.PageName);
                             $('#fetch_table_detail_shop').append('<tr>'+
                                 '<td>'+no+'</td>'+
-                                '<td>'+item.code+'</td>'+
+                                '<td>'+item.nama_product+'</td>'+
                                 '<td>'+item.harga_jual+'</td>'+
                                 '<td>'+item.total_pcs+'</td>'+
                                 '<td>'+item.total_harga+'</td>'+
                             '</tr>');
+
+                            gt += parseInt(item.total_harga);
                             
                             no++;
                         });
 
+                        // $('#fetch_table_detail_shop').append('<tr>'+
+                        // '<td colspan="5"><hr></td>'+
+                        // '</tr>');
+
+                        $('#fetch_table_detail_shop').append('<tr>'+
+                        '<td colspan="4">Grand Total</td>'+
+                        '<td>'+gt+'</td>'+
+                        '</tr>');
+
+                        $('#fetch_done_kembalian').append('<input onkeyup="hitungKembalian('+gt+', this.value);" type="number" class="form-control" name="uang_diterima" id="uang_diterima" placeholder="Input Uang Diterima">');
+                        
+                        $('#fetch_done_kembalian').append('<p style="font-weight:bold;" id="total_kembalian"></p>');
                         // detectionFlag = false;
                         session = "";
                         
@@ -202,6 +222,23 @@
             });
         })
     }) 
+
+    function hitungKembalian(total_belanja, total_uang){
+        // console.log(total_belanja, parseInt(total_uang));
+        var hitung = (parseInt(total_uang)-total_belanja);
+        console.log(hitung);
+        $('#total_kembalian').text('Total Kembalian = ' +formatIDRCurrency(hitung));
+    }
+
+    function formatIDRCurrency(amount) {
+        // Convert the amount to a number
+        var numericAmount = parseFloat(amount);
+
+        // Format the number as currency with Indonesian Rupiah symbol (Rp)
+        var formattedAmount = numericAmount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+
+        return formattedAmount;
+    }
 
     function check_exist(code){
             
@@ -218,7 +255,8 @@
             },
             success: function(data){
 
-                    result = JSON.parse(data);
+                // alert(data);
+                result = JSON.parse(data);
                     
                 if(result.res == '00'){
 
@@ -243,6 +281,12 @@
                         '<div class="input-group input-group-dynamic mb-4">'+
                             '<input type="number" class="form-control" name="harga_jual_retail" id="harga_jual_retail" placeholder="Harga Jual Retail">'+
                         '</div>'+
+                        '<div class="col-12"><hr></div>'+
+                        '<div class="col-12">'+
+                            '<div class="input-group input-group-dynamic mb-4">'+
+                                '<input type="number" class="form-control" name="total_pcs" id="total_pcs" placeholder="Total Pcs">'+
+                            '</div>'+
+                        '</div>'+
                         '<div class="form-check form-check-radio form-check-inline">'+
                             '<label class="form-check-label">'+
                                 '<input class="form-check-input" type="radio" name="def_harga" id="def_harga_1" value="1" checked> Harga Grosir '+
@@ -265,7 +309,6 @@
                     }else{
 
                         $('#modal_barang_ada').modal('show');
-                        // save_transaction(code);
                         detectionFlag = false;
                     }
                         
@@ -275,12 +318,13 @@
         });
     }
 
-    function save_transaction(code, def_harga){
+    function save_transaction(code, def_harga, total_pcs){
 
         var data_json = {
             code: code,
             session: session,
-            def_harga: def_harga
+            def_harga: def_harga,
+            total_pcs: total_pcs
         }
 
         $.ajax({
@@ -349,7 +393,7 @@
 
         setTimeout(function() {
             printWindow.close();
-        }, 1000);
+        }, 1000); //sesuaikan kalau yg ngeprint nya suka lama bikin intervalnya lama, dan begitupun sebaliknya 
     }
 
     </script>

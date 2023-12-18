@@ -12,27 +12,39 @@
             <div class="modal-body text-center">
 
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-12">
                         <a href="master_product.php"><small style="font-size: small;color:red !important;" id="emailHelp" class="form-text text-muted">*Barang tidak ada ? klik disini</small></a>
                         <br>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-12">
                         <hr>
                     </div>
-                    <div class="col-lg-2"></div>
-                    <div class="col-lg-8">
+                    <div class="col-2"></div>
+                    <div class="col-8">
                         <!-- <a href="master_product.php"><p style="font-size:small;">Barang tidak ada ?</p></a> -->
                         <select name="code" id="code_manual" class="form-control select2">
                             <?php get_list_barang_not_scanable(); ?>
                         </select>
                     </div>
-                    <div class="col-lg-2"></div>
+                    <div class="col-2"></div>
+
+                    <div class="col-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-2"></div>
+
+                    <div class="col-8">
+                        <div class="input-group input-group-dynamic mb-4">
+                            <input type="number" class="form-control" name="total_pcs" id="total_pcs_manual" placeholder="Total Pcs">
+                        </div>
+                    </div>
+
+                    <div class="col-2"></div>
+                    
+                    
                 </div>
 
-                <div class="col-lg-12">
-                    <hr>
-                </div>
-                
                 <div class="form-check form-check-radio form-check-inline">
                     <label class="form-check-label">
                         <input class="form-check-input" type="radio" name="def_harga_manual" id="def_harga_manual_1" value="1" checked> Harga Grosir

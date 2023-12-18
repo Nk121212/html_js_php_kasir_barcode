@@ -11,6 +11,11 @@
         <!-- <form id="form_scan_ada"> -->
             <div class="modal-body text-center">
 
+                <div class="col-12">
+                    <div class="input-group input-group-dynamic mb-4">
+                        <input type="number" class="form-control" name="total_pcs" id="total_pcs_brg_ada" placeholder="Total Pcs">
+                    </div>
+                </div>
                 <div class="form-check form-check-radio form-check-inline">
                     <label class="form-check-label">
                         <input class="form-check-input" type="radio" name="def_harga_ada" id="def_harga_ada_1" value="1" checked> Harga Grosir

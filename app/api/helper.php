@@ -162,13 +162,16 @@
         $sql_1 = "SELECT session FROM session_now WHERE id = '1' ";
         $result_1 = $conn->query($sql_1);
 
+        $sess_now = "";
         while ($rows_1 = $result_1->fetch_assoc()) {
             $sess_now = $rows_1['session'];
         }
 
         //replace ke table session_old
-        $sql_2 = "REPLACE INTO session_old (id, session) VALUES (1, '".$sess_now."') ";
-        $result_2 = $conn->query($sql_2);
+        if($sess_now !== null){
+            $sql_2 = "REPLACE INTO session_old (id, session) VALUES (1, '".$sess_now."') ";
+            $result_2 = $conn->query($sql_2);
+        }
         
         $sql = "UPDATE session_now SET `session` = NULL WHERE id = '1' ";
 

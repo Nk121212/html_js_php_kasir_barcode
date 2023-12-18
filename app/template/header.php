@@ -29,14 +29,20 @@
   
   <style>
     #scanner-container > video {
-        width: 100%;
-        height: 20%;
+        /* width: 100%;
+        height: 20%; */
+        width: 50%;
+        height: 50%;
     }
 
     #scanner-container > canvas.drawing, canvas.drawingBuffer {
         position: absolute;
         left: 0;
         top: 0;
+    }
+
+    div#scanner-container{
+      text-align: center;
     }
   </style>
   
